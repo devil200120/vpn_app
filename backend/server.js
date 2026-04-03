@@ -4,6 +4,7 @@ const helmet = require('helmet');
 const cookieParser = require('cookie-parser');
 const dotenv = require('dotenv');
 const path = require('path');
+const fs = require('fs');
 const connectDB = require('./config/db');
 const { errorHandler } = require('./middleware/errorHandler');
 
@@ -17,7 +18,18 @@ connectDB();
 
 // Middleware
 app.use(helmet({
-  contentSecurityPolicy: isProduction ? undefined : false,
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'", "'unsafe-inline'", "https://sdk.cashfree.com"],
+      scriptSrcElem: ["'self'", "'unsafe-inline'", "https://sdk.cashfree.com"],
+      frameSrc: ["'self'", "https://sdk.cashfree.com", "https://*.cashfree.com"],
+      connectSrc: ["'self'", "https://*.cashfree.com", "https://api.cashfree.com"],
+      imgSrc: ["'self'", "data:", "https:"],
+      styleSrc: ["'self'", "'unsafe-inline'"],
+      fontSrc: ["'self'", "data:", "https:"],
+    },
+  },
 }));
 
 const allowedOrigins = [
