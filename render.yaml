@@ -2,14 +2,12 @@ services:
   - type: web
     name: shieldvpn
     runtime: node
-    rootDir: .
-    buildCommand: npm run build && cd backend && npm install
-    startCommand: npm start
+    plan: free
+    buildCommand: cd frontend && npm install && npm run build && cd ../backend && npm install
+    startCommand: cd backend && node server.js
     envVars:
       - key: NODE_ENV
         value: production
-      - key: PORT
-        value: 10000
       - key: MONGO_URI
         sync: false
       - key: JWT_SECRET
