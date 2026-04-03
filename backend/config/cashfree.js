@@ -1,11 +1,9 @@
 const { Cashfree } = require('cashfree-pg');
 
-const cashfree = new Cashfree(
-  process.env.CASHFREE_ENV === 'PRODUCTION'
-    ? Cashfree.PRODUCTION
-    : Cashfree.SANDBOX,
-  process.env.CASHFREE_APP_ID,
-  process.env.CASHFREE_SECRET_KEY
-);
+Cashfree.XClientId = process.env.CASHFREE_APP_ID;
+Cashfree.XClientSecret = process.env.CASHFREE_SECRET_KEY;
+Cashfree.XEnvironment = process.env.CASHFREE_ENV === 'PRODUCTION'
+  ? Cashfree.Environment.PRODUCTION
+  : Cashfree.Environment.SANDBOX;
 
-module.exports = { cashfree, Cashfree };
+module.exports = { Cashfree };

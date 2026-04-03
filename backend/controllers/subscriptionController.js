@@ -1,6 +1,6 @@
 const Subscription = require('../models/Subscription');
 const User = require('../models/User');
-const { cashfree, Cashfree } = require('../config/cashfree');
+const { Cashfree } = require('../config/cashfree');
 const crypto = require('crypto');
 
 const PLANS = {
@@ -78,7 +78,7 @@ const createOrder = async (req, res) => {
       },
     };
 
-    const response = await cashfree.PGCreateOrder(request);
+    const response = await Cashfree.PGCreateOrder('2023-08-01', request);
 
     // Save subscription record
     await Subscription.create({
@@ -111,7 +111,7 @@ const verifyPayment = async (req, res) => {
   }
 
   try {
-    const response = await cashfree.PGFetchOrder(orderId);
+    const response = await Cashfree.PGFetchOrder('2023-08-01', orderId);
     const orderData = response.data;
 
     const subscription = await Subscription.findOne({ orderId });
