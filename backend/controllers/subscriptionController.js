@@ -7,7 +7,7 @@ const PLANS = {
   basic: {
     name: 'Basic',
     tier: 'basic',
-    price: 399,
+    price: 1,
     currency: 'INR',
     features: [
       'Access to US, UK, Germany servers',
@@ -19,7 +19,7 @@ const PLANS = {
   premium: {
     name: 'Premium',
     tier: 'premium',
-    price: 799,
+    price: 1,
     currency: 'INR',
     features: [
       'Access to all 5 server regions',
