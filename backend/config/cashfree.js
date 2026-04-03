@@ -6,4 +6,6 @@ Cashfree.XEnvironment = process.env.CASHFREE_ENV === 'PRODUCTION'
   ? CFEnvironment.PRODUCTION
   : CFEnvironment.SANDBOX;
 
-module.exports = { Cashfree };
+const cashfree = new Cashfree();
+
+module.exports = { cashfree, Cashfree };
