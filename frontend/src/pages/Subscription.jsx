@@ -203,10 +203,20 @@ const Subscription = () => {
           const script = document.createElement('script');
           script.src = 'https://sdk.cashfree.com/js/v3/cashfree.js';
           document.body.appendChild(script);
-          await new Promise((resolve) => { script.onload = resolve; });
+          await new Promise((resolve, reject) => {
+            script.onload = resolve;
+            script.onerror = reject;
+          });
         }
-        const cashfree = window.Cashfree({ mode: 'production' });
-        await cashfree.checkout({ paymentSessionId: data.paymentSessionId, redirectTarget: '_self' });
+        const cashfreeInstance = window.Cashfree({ mode: 'production' });
+        const result = await cashfreeInstance.checkout({
+          paymentSessionId: data.paymentSessionId,
+          redirectTarget: '_self',
+        });
+        if (result?.error) {
+          toast.error(result.error.message || 'Payment failed');
+          setProcessing(false);
+        }
       }
     } catch (error) {
       toast.error(error.response?.data?.message || 'Failed to create order');
