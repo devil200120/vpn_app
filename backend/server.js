@@ -66,6 +66,7 @@ app.use('/api/auth', require('./routes/auth'));
 app.use('/api/servers', require('./routes/servers'));
 app.use('/api/connections', require('./routes/connections'));
 app.use('/api/subscriptions', require('./routes/subscriptions'));
+app.use('/api/vpn', require('./routes/vpn'));
 
 // Health check
 app.get('/api/health', (req, res) => {

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useConnection } from '../hooks/useConnection';
-import { getServers, seedServers } from '../services/serverService';
+import { getServers, seedServers, downloadVpnConfig } from '../services/serverService';
 import { connectToServer, disconnectFromServer } from '../services/connectionService';
 import { motion, AnimatePresence } from 'framer-motion';
 import toast from 'react-hot-toast';
@@ -14,7 +14,7 @@ const tierColors = { free:'#10b981', basic:'#3b82f6', premium:'#f59e0b' };
 const tierBg = { free:'rgba(16,185,129,0.1)', basic:'rgba(59,130,246,0.1)', premium:'rgba(245,158,11,0.1)' };
 const tierBorder = { free:'rgba(16,185,129,0.2)', basic:'rgba(59,130,246,0.2)', premium:'rgba(245,158,11,0.2)' };
 
-const ServerCard = ({ server, onConnect, isConnected, isConnecting, onUpgrade }) => {
+const ServerCard = ({ server, onConnect, isConnected, isConnecting, onUpgrade, onDownload }) => {
   const locked = !server.accessible;
   const loadColor = server.load > 80 ? '#ef4444' : server.load > 50 ? '#f59e0b' : '#10b981';
 
@@ -110,21 +110,32 @@ const ServerCard = ({ server, onConnect, isConnected, isConnecting, onUpgrade })
             <HiLockClosed className="text-sm" /> Upgrade to unlock
           </button>
         ) : (
-          <button disabled={isConnecting}
-            className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200"
-            style={{
-              background: isConnected ? 'rgba(239,68,68,0.15)' : 'rgba(124,58,237,0.2)',
-              color: isConnected ? '#f87171' : '#c4b5fd',
-              border: `1px solid ${isConnected ? 'rgba(239,68,68,0.25)' : 'rgba(124,58,237,0.3)'}`,
-            }}>
-            {isConnecting ? (
-              <div className="w-4 h-4 border-2 border-current/30 border-t-current rounded-full animate-spin" />
-            ) : isConnected ? (
-              <><HiSignalSlash className="text-sm" /> Disconnect</>
-            ) : (
-              <><HiBolt className="text-sm" /> Connect</>
-            )}
-          </button>
+          <div className="flex flex-col gap-2">
+            <button disabled={isConnecting}
+              className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200"
+              style={{
+                background: isConnected ? 'rgba(239,68,68,0.15)' : 'rgba(124,58,237,0.2)',
+                color: isConnected ? '#f87171' : '#c4b5fd',
+                border: `1px solid ${isConnected ? 'rgba(239,68,68,0.25)' : 'rgba(124,58,237,0.3)'}`,
+              }}>
+              {isConnecting ? (
+                <div className="w-4 h-4 border-2 border-current/30 border-t-current rounded-full animate-spin" />
+              ) : isConnected ? (
+                <><HiSignalSlash className="text-sm" /> Disconnect</>
+              ) : (
+                <><HiBolt className="text-sm" /> Connect</>
+              )}
+            </button>
+            <button
+              onClick={(e) => { e.stopPropagation(); onDownload(server); }}
+              className="w-full flex items-center justify-center gap-2 py-2 rounded-xl text-xs font-semibold transition-all duration-200"
+              style={{ background: 'rgba(16,185,129,0.08)', color: '#34d399', border: '1px solid rgba(16,185,129,0.2)' }}
+              onMouseEnter={(e) => { e.currentTarget.style.background='rgba(16,185,129,0.18)'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.background='rgba(16,185,129,0.08)'; }}
+            >
+              ⬇ Download WireGuard Config
+            </button>
+          </div>
         )}
       </div>
     </motion.div>
@@ -143,6 +154,21 @@ const Servers = () => {
 
   const handleUpgrade = (tier) => {
     navigate(`/subscription?highlight=${tier}`);
+  };
+
+  const handleDownload = async (server) => {
+    try {
+      const { data } = await downloadVpnConfig(server._id);
+      const url = URL.createObjectURL(new Blob([data], { type: 'text/plain' }));
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `shieldvpn-${server.countryCode.toLowerCase()}-${server.city.toLowerCase().replace(/\s+/g, '-')}.conf`;
+      a.click();
+      URL.revokeObjectURL(url);
+      toast.success(`WireGuard config downloaded for ${server.name}`);
+    } catch (error) {
+      toast.error(error.response?.data?.message || 'Failed to download config');
+    }
   };
 
   const loadServers = async () => {
@@ -254,6 +280,7 @@ const Servers = () => {
               isConnected={activeConnection?.serverId?._id === server._id}
               isConnecting={connectingId === server._id}
               onUpgrade={handleUpgrade}
+              onDownload={handleDownload}
             />
           ))}
         </motion.div>

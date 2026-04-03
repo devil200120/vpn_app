@@ -60,6 +60,10 @@ const seedServers = async (req, res) => {
         tier: 'free',
         latency: 25,
         flag: '🇺🇸',
+        wgEndpoint: '198.51.100.1',
+        wgPort: 51820,
+        wgPublicKey: 'REPLACE_WITH_US_SERVER_WG_PUBLIC_KEY',
+        wgDNS: '1.1.1.1, 1.0.0.1',
       },
       {
         name: 'UK London',
@@ -72,6 +76,10 @@ const seedServers = async (req, res) => {
         tier: 'basic',
         latency: 85,
         flag: '🇬🇧',
+        wgEndpoint: '203.0.113.10',
+        wgPort: 51820,
+        wgPublicKey: 'REPLACE_WITH_UK_SERVER_WG_PUBLIC_KEY',
+        wgDNS: '1.1.1.1, 1.0.0.1',
       },
       {
         name: 'DE Frankfurt',
@@ -84,6 +92,10 @@ const seedServers = async (req, res) => {
         tier: 'basic',
         latency: 95,
         flag: '🇩🇪',
+        wgEndpoint: '203.0.113.20',
+        wgPort: 51820,
+        wgPublicKey: 'REPLACE_WITH_DE_SERVER_WG_PUBLIC_KEY',
+        wgDNS: '1.1.1.1, 1.0.0.1',
       },
       {
         name: 'JP Tokyo',
@@ -96,6 +108,10 @@ const seedServers = async (req, res) => {
         tier: 'premium',
         latency: 150,
         flag: '🇯🇵',
+        wgEndpoint: '203.0.113.30',
+        wgPort: 51820,
+        wgPublicKey: 'REPLACE_WITH_JP_SERVER_WG_PUBLIC_KEY',
+        wgDNS: '1.1.1.1, 1.0.0.1',
       },
       {
         name: 'SG Singapore',
@@ -108,6 +124,10 @@ const seedServers = async (req, res) => {
         tier: 'premium',
         latency: 170,
         flag: '🇸🇬',
+        wgEndpoint: '203.0.113.40',
+        wgPort: 51820,
+        wgPublicKey: 'REPLACE_WITH_SG_SERVER_WG_PUBLIC_KEY',
+        wgDNS: '1.1.1.1, 1.0.0.1',
       },
     ];
 

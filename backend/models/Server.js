@@ -48,6 +48,22 @@ const serverSchema = new mongoose.Schema(
       type: String,
       default: '',
     },
+    wgEndpoint: {
+      type: String,
+      default: '',
+    },
+    wgPort: {
+      type: Number,
+      default: 51820,
+    },
+    wgPublicKey: {
+      type: String,
+      default: '',
+    },
+    wgDNS: {
+      type: String,
+      default: '1.1.1.1, 1.0.0.1',
+    },
   },
   { timestamps: true }
 );
