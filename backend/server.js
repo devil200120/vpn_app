@@ -63,7 +63,8 @@ if (isProduction) {
   const frontendDist = path.join(__dirname, '..', 'frontend', 'dist');
   app.use(express.static(frontendDist));
   // All non-API routes return index.html (React Router handles them)
-  app.get('/{*path}', (req, res) => {
+  app.use((req, res, next) => {
+    if (req.path.startsWith('/api/')) return next();
     res.sendFile(path.join(frontendDist, 'index.html'));
   });
 }
