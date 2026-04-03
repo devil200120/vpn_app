@@ -1,0 +1,15 @@
+{
+  "manifest_version": 3,
+  "name": "ShieldVPN",
+  "version": "1.0.0",
+  "description": "Secure browser VPN — Route your traffic through ShieldVPN servers with one click.",
+  "permissions": ["proxy", "storage", "tabs"],
+  "host_permissions": ["https://shieldvpn.onrender.com/*"],
+  "background": {
+    "service_worker": "background/background.js"
+  },
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_title": "ShieldVPN"
+  }
+}

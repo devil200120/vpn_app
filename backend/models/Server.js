@@ -64,6 +64,14 @@ const serverSchema = new mongoose.Schema(
       type: String,
       default: '1.1.1.1, 1.0.0.1',
     },
+    proxyHost: {
+      type: String,
+      default: '',
+    },
+    proxyPort: {
+      type: Number,
+      default: 1080,
+    },
   },
   { timestamps: true }
 );

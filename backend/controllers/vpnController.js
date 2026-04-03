@@ -60,4 +60,30 @@ PersistentKeepalive = 25
   }
 };
 
-module.exports = { downloadConfig };
+// @desc    Get proxy credentials for browser extension
+// @route   GET /api/vpn/proxy-credentials/:serverId
+const getProxyCredentials = async (req, res) => {
+  try {
+    const server = await Server.findById(req.params.serverId);
+    if (!server) return res.status(404).json({ message: 'Server not found' });
+
+    const userTier = req.user.subscription?.tier || 'free';
+    const accessibleTiers = TIER_ACCESS[userTier] || ['free'];
+    if (!accessibleTiers.includes(server.tier)) {
+      return res.status(403).json({ message: 'Upgrade your plan to access this server' });
+    }
+
+    if (!server.proxyHost) {
+      return res.status(503).json({ message: 'Proxy server not configured for this location yet' });
+    }
+
+    res.json({
+      proxyHost: server.proxyHost,
+      proxyPort: server.proxyPort || 1080,
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+module.exports = { downloadConfig, getProxyCredentials };

@@ -64,6 +64,8 @@ const seedServers = async (req, res) => {
         wgPort: 51820,
         wgPublicKey: 'REPLACE_WITH_US_SERVER_WG_PUBLIC_KEY',
         wgDNS: '1.1.1.1, 1.0.0.1',
+        proxyHost: '198.51.100.1',
+        proxyPort: 1080,
       },
       {
         name: 'UK London',
